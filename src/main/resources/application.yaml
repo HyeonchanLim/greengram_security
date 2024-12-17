@@ -6,7 +6,7 @@ file:
 
 jwt:
   issuer: green@green.kr
-  secret-key: study-springboot
+  secret-key: gpwlsmsqkqhrhtjdrurdlsjanqkfmekrmqgkrh12sjansksvhrgkek234198afdajknqwernkjahdo9faerknqweriuiauvhaqwer8234kjdf98123klasd908f13kj98g
 
 
 mybatis:

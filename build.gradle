@@ -28,7 +28,7 @@ dependencies {
     // ant는 직접 관리 필수 나머지는 라이브러리 자동 , gradle 이 가장 진보
 
     //jsonwebtoken maven
-    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+    implementation 'io.jsonwebtoken:jjwt:0.12.6'
 
     //log4jdbc 라이브러리 추가 , Persistence Query문 / 결과값 확인
     implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
@@ -62,4 +62,5 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+    jvmArgs "-Xshare:off"
 }

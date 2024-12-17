@@ -38,10 +38,8 @@ public class WebSecurityConfig {
                 // 위의 api/feed , api/feed/ver3 주소로 접속 -> 로그인 되어 있어야만 사용 가능 / 인가 처리 부분
                         .anyRequest().permitAll())
                 // 나머지는 모두 허용하겠다는 표시 permitall
-
                 .build();
-
-
+                // builder 는 아니지만 체이닝 기법을 종료하기 위해서 build 로 종료해줌
     }
 
 }

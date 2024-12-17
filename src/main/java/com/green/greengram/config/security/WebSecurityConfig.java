@@ -40,6 +40,7 @@ public class WebSecurityConfig {
                 // 나머지는 모두 허용하겠다는 표시 permitall
 
                 .build();
+
     }
 
 }

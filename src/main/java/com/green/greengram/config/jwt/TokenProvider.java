@@ -7,6 +7,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,7 @@ import javax.crypto.SecretKey;
 import java.time.Duration;
 import java.util.Date;
 
+@Slf4j
 @Service
 public class TokenProvider {
     private final JwtProperties jwtProperties;
@@ -25,8 +27,8 @@ public class TokenProvider {
     //DI(Defendency Injection) - 외부에서 들어오는 데이터를 DI 라고 함
     // 스프링컨테이너 - 빈등록 되어서 가능 / @Service - @Component 최상위 어노테이션 으로 빈등록
     public TokenProvider(ObjectMapper objectMapper , JwtProperties jwtProperties) {
-        this.jwtProperties = jwtProperties;
         this.objectMapper = objectMapper;
+        this.jwtProperties = jwtProperties;
         this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(jwtProperties.getSecretKey()));
         // hamc 대칭 , sha 암호화
         // BASE64URL 을 인코딩 -> decode
@@ -35,7 +37,7 @@ public class TokenProvider {
     // di 받아올꺼임
 
     //jwt 토큰 생성 , Duration (기간 설정)
-    public String generateToken(JwtUser jwtUser , Duration expiredAt){
+    public String generateToken(JwtUser jwtUser , Duration expiredAt){ // duration 은 long 타입으로 넘어옴
         Date now = new Date();
         return makeToken(jwtUser , new Date(now.getTime() + expiredAt.toMillis()));
         // jwtuser(signeduserid) 접속 유저 아이디(정보) + 토큰 시간 으로 리턴
@@ -50,11 +52,13 @@ public class TokenProvider {
                 .issuer(jwtProperties.getIssuer()) // issuer - yaml 에 작성한 green@green.kr - 이메일
                 .issuedAt(new Date()) // 토큰 생성 시점 시간
                 .expiration(expiry) // exp - 토큰 종료 시점 시간
-                .claim("signedUser", makeClaimByUserToString(jwtUser))// 여기까지 내용(payload) ,
+                .claim("signedUser", makeClaimByUserToString(jwtUser))
+                // 여기까지 내용(payload) , 밑에서 직렬화를 통해 문자열로 바뀐 jwtuser 데이터가 넘어옴
                 .signWith(secretKey)// jwt 암호화
                 .compact();// 여기까지 서명(signature) , compact -> 여기까지 정리하고 암호화 jwt 만듦
                 // build 대신 jwt 에서는 compact 로 종료
         // builder 를 사용한 체이닝 기법 -> header 작성 끝내고 and 사용 -> payload 내용 부분으로 넘어가면서 jwtbuilder 가 열림
+        // 체이닝 기법으로 직렬화 하면 string 타입으로 넘어가고 리턴을 담을 수 있는 타입도 string 뿐 !
     }
     private String makeClaimByUserToString(JwtUser jwtUser){
         // 객체 자체를 jwt 에 담고 싶어서 객체를 직렬화
@@ -83,7 +87,7 @@ public class TokenProvider {
             return false;
         }
     }
-    // spring - security - Authentication 사용
+    // spring security 에서 인증 처리를 해주어야 하는데 이때 Authentication 객체가 필요
     public Authentication getAuthentication(String token){
         // getuser - token 을 파싱해서 사용자 정보를 가져옴
         UserDetails userDetails = getUserDetailsFromToken(token);
@@ -93,7 +97,7 @@ public class TokenProvider {
                 ? null
                 : new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
         // 리턴 타입이 UsernamePasswordAuthenticationToken 인데 이거는 Authentication 의 자식이라서 담을 수 있음
-        // UsernamePasswordAuthenticationToken - security 의 authen 구현체 : userdetails , 비밀번호 , 권한 목록
+        // UsernamePasswordAuthenticationToken - security 의 authen 구현체 : userdetails , 비밀번호 , 권한 목록 (role)
 
     }
     public UserDetails getUserDetailsFromToken(String token){
@@ -120,6 +124,7 @@ public class TokenProvider {
     }
     public Claims getClaims(String token){
         // claims 는 jwt 의 payload 를 키 - 값 매핑으로 관리
+        // validToken 의 복호화를 위해서 서명 부분 체크해주는 역할도 함
 
         return Jwts.parser()
                 .verifyWith(secretKey)

@@ -4,11 +4,13 @@ package com.green.greengram.config.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 @Configuration // 메소드 빈등록이 있어야 의미가 있다. 그래야 빈등록을 통해서 싱글톤이 됨
 // 그러지 않으면 매번 메소드 호출하면서 사용해야함
@@ -34,12 +36,22 @@ public class WebSecurityConfig {
                 // 시큐리티 로그인 화면이 사라짐
                 .formLogin(form -> form.disable()) // 폼로그인도 화면 기능 자체를 off
                 .csrf(csrf -> csrf.disable()) // 보안관련 SSR 이 아니면 보안이슈가 없기 때문에 기능을 끈다.
-                .authorizeHttpRequests(req -> req.requestMatchers("/api/feed" , "/api/feed/ver" , "/api/").authenticated()
+                .authorizeHttpRequests(req ->
+                        req.requestMatchers("/api/feed" , "/api/feed/**").authenticated()
                 // 위의 api/feed , api/feed/ver3 주소로 접속 -> 로그인 되어 있어야만 사용 가능 / 인가 처리 부분
+                        .requestMatchers(HttpMethod.GET,"/api/user").authenticated()
+                        .requestMatchers(HttpMethod.PATCH,"/api/user/pic").authenticated()
                         .anyRequest().permitAll())
+                // requestMatchers 는 특정 URL 패턴과 HTTP 메서드를 매칭 -> 요청에 대한 보안 규칙을 적용할지 결정
+                // authenticated() 는 요청이 매칭되었을 때 인증된 사용자만 접근을 허용 즉, 로그인이 필요
+                // authenticated 같은 접근 제어 메서드, 종결 메서드를 명시하지 않으면 체이닝 구문 오류가 발생
                 // 나머지는 모두 허용하겠다는 표시 permitall
                 .build();
                 // builder 는 아니지만 체이닝 기법을 종료하기 위해서 build 로 종료해줌
+    }
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 
 }

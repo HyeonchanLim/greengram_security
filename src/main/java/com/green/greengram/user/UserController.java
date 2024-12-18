@@ -4,15 +4,14 @@ import com.green.greengram.common.model.ResultResponse;
 import com.green.greengram.user.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Mapper;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -32,8 +31,8 @@ public class UserController {
                 .build();
     }
     @PostMapping("sign-in")
-    public ResultResponse<UserSignInRes> selUserForSignIn (@RequestBody UserSignInReq p) {
-        UserSignInRes result = service.selUserForSignIn(p);
+    public ResultResponse<UserSignInRes> selUserForSignIn (@RequestBody UserSignInReq p , HttpServletResponse response) {
+        UserSignInRes result = service.selUserForSignIn(p , response);
         return ResultResponse.<UserSignInRes>builder()
                 .resultMessage(result.getMessage())
                 .resultData(result)
@@ -49,6 +48,17 @@ public class UserController {
                 .resultData(res)
                 .build();
     }
+    @GetMapping("access-token")
+    @Operation(summary = "AccessToken 재발행")
+    public ResultResponse<String> getAccessToken(HttpServletRequest req){
+        String accessToken = service.getAccessToken(req);
+
+        return ResultResponse.<String>builder()
+                .resultMessage("Access Token 재발행")
+                .resultData(accessToken)
+                .build();
+    }
+
     @PatchMapping("pic")
     public ResultResponse<String> patchProfilePic(@ModelAttribute UserPicPatchReq p){
         log.info("UserController > patchProfilePic > p : {}" , p);

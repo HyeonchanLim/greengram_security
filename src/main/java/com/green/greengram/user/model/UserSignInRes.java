@@ -12,6 +12,7 @@ public class UserSignInRes {
     private long userId;
     private String nickName;
     private String pic;
+    private String accessToken;
 
     // 밑에 2가지는 프론트에서 볼 이유 없음 !
     // upw 는 swagger 표시 안 되지만 응답 때 빼는 역할도 한다.

@@ -1,6 +1,7 @@
 package com.green.greengram.feed;
 
 import com.green.greengram.common.MyFileUtils;
+import com.green.greengram.config.security.AuthenticationFacade;
 import com.green.greengram.feed.comment.FeedCommentMapper;
 import com.green.greengram.feed.comment.model.FeedCommentDto;
 import com.green.greengram.feed.comment.model.FeedCommentGetReq;
@@ -28,12 +29,14 @@ public class FeedService {
     private final FeedpicMapper feedpicMapper;
     private final MyFileUtils myFileUtils;
     private final FeedCommentMapper feedCommentMapper;
+    private final AuthenticationFacade authenticationFacade;
 
     @Transactional
     // 애노테이션 걸어두면 구현부 중간에 오류가 발생하면 아예 실행 X
     // 애노테이션 없으면 오류 직전까지의 실행부분이 실행 적용
     // 아래의 메소드에 구현부 내용이 많다 -> 트랜젝션
     public FeedPostRes postFeed(List<MultipartFile> pics , FeedPostReq p){
+        p.setWriterUserId(authenticationFacade.getSignedUserId());
         int result = mapper.insFeed(p);
         // 파일 등록
         long feedId = p.getFeedId();
@@ -74,6 +77,7 @@ public class FeedService {
     }
 
     public List<FeedGetRes> selFeedList (FeedGetReq p){
+        p.setSighedUserId(authenticationFacade.getSignedUserId());
         // n + 1 이슈 발생 -> 리스트를 만들었기 때문에 리스트 가져오는데 +1회가 발생함
         // 피드 20 * 2번 + 리스트 1 -> 41번 실행
         List<FeedGetRes> list = mapper.selFeedList(p);
@@ -110,8 +114,12 @@ public class FeedService {
         return null;
     }
     public List<FeedGetRes> getFeedList3(FeedGetReq p){
+        p.setSighedUserId(authenticationFacade.getSignedUserId());
         List<FeedGetRes> list = mapper.selFeedList(p);
 
+        if (list.size()==0){
+            return list;
+        }
         List<Long> feedIds4 = list.stream().map(FeedGetRes::getFeedId).collect(Collectors.toList());
         List<Long> feedIds5 = list.stream().map(item -> ((FeedGetRes)item).getFeedId()).toList();
         List<Long> feedIds6 = list.stream().map(item -> { return ((FeedGetRes)item).getFeedId();}).toList();
@@ -182,6 +190,7 @@ public class FeedService {
     }
     @Transactional
     public int deleteFeed(FeedDeleteReq p) {
+        p.setSignedUserId(authenticationFacade.getSignedUserId());
         //피드 댓글, 좋아요 , 사진 삭제
         int affectedRows = mapper.delFeedLikeAndFeedCommentAndFeedPic(p);
         log.info("affectedRows: {}", affectedRows);

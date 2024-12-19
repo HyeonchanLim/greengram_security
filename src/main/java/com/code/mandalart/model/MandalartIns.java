@@ -8,6 +8,6 @@ import lombok.Setter;
 public class MandalartIns {
     private long projectId;
     private long signedUserId;
-    private String stardDate;
+    private String startDate;
     private String finishDate;
 }

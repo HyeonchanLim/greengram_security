@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.green.greengram.config.security.MyUserDetails;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -102,28 +103,34 @@ public class TokenProvider {
         // UsernamePasswordAuthenticationToken - security 의 authen 구현체 : userdetails , 비밀번호 , 권한 목록 (role)
 
     }
-    public UserDetails getUserDetailsFromToken(String token){
+    public JwtUser getJwtUserFromToken(String token) {
         Claims claims = getClaims(token);
-        String json = (String)claims.get("signedUser"); // 직렬화
+        String json = (String)claims.get("signedUser");
         JwtUser jwtUser = null;
         try {
-            jwtUser = objectMapper.readValue(json , JwtUser.class);
+            jwtUser = objectMapper.readValue(json, JwtUser.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+        return jwtUser;
+    }
+
+    public UserDetails getUserDetailsFromToken(String token) {
+        JwtUser jwtUser = getJwtUserFromToken(token);
+        MyUserDetails userDetails = new MyUserDetails();
+        userDetails.setJwtUser(jwtUser);
+        return userDetails;
+    }
         // 객체화 과정
         // jwtuser 의 클래스 전부 컨버트
         // JwtUser 클래스에 작성한 멤버필드 - signeduserid , roles 필드에 값을 매핑
         // 그거를 문자열로 이루어진 jwtuser 에 객체로 변환
         // json 에 멤버필드 2가지 키가 있어야 한다.
-        MyUserDetails userDetails = new MyUserDetails();
-        userDetails.setJwtUser(jwtUser);
+
         // 위에 2가지 키 값을 myuserdetails 로 값 반환
         // details 에서 for 반복문으로 role 입력 - signeduserid 마다 List<roles> 만들어줌
         // 이게 json - header 부분에 적용
         // set 객체 변환하면서 jwtuser 에 매핑
-        return userDetails;
-    }
     public Claims getClaims(String token){
         // claims 는 jwt 의 payload 를 키 - 값 매핑으로 관리
         // validToken 의 복호화를 위해서 서명 부분 체크해주는 역할도 함

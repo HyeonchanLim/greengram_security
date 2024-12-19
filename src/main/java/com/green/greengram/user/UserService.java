@@ -4,12 +4,14 @@ import com.green.greengram.common.CookieUtils;
 import com.green.greengram.common.MyFileUtils;
 import com.green.greengram.config.jwt.JwtUser;
 import com.green.greengram.config.jwt.TokenProvider;
+import com.green.greengram.config.security.AuthenticationFacade;
 import com.green.greengram.user.model.*;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +31,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
     private final CookieUtils cookieUtils;
+    private final AuthenticationFacade authenticationFacade;
 
     public int postSignUp (MultipartFile pic ,UserSignUpReq p){
         String savedPicName = (pic != null ? myFileUtils.makeRandomFileName(pic) : null);
@@ -76,7 +79,7 @@ public class UserService {
         jwtUser.getRoles().add("ROLE_USER");
         jwtUser.getRoles().add("ROLE_ADMIN");
         System.out.println(jwtUser.getRoles());
-        String accessToken = tokenProvider.generateToken(jwtUser , Duration.ofMinutes(20));
+        String accessToken = tokenProvider.generateToken(jwtUser , Duration.ofMinutes(100));
         String refreshToken = tokenProvider.generateToken(jwtUser , Duration.ofDays(15));
 
         // refreshToken 은 쿠키에 담아서 보낼꺼임
@@ -89,17 +92,22 @@ public class UserService {
     }
 
     public UserInfoGetRes getUserInfo (UserInfoGetReq p) {
+        p.setProfileUserId(authenticationFacade.getSignedUserId());
         return mapper.selUserInfo2(p);
     }
 
-    public String getAccessToken(HttpServletRequest req){
-        Cookie cookie = cookieUtils.getCookie( req , "refreshToken");
+    public String getAccessToken(HttpServletRequest req) {
+        Cookie cookie = cookieUtils.getCookie(req, "refreshToken");
         String refreshToken = cookie.getValue();
-        log.info("refreshToken: {}" , refreshToken);
-        return refreshToken;
+        log.info("refreshToken: {}", refreshToken);
+
+        JwtUser jwtUser = tokenProvider.getJwtUserFromToken(refreshToken);
+        String accessToken = tokenProvider.generateToken(jwtUser, Duration.ofMinutes(100));
+        return accessToken;
     }
 
     public String patchUserPic(UserPicPatchReq p){
+        p.setSignedUserId(authenticationFacade.getSignedUserId());
         // 1. 저장할 파일명 생성 -> 확장자는 오리지날 파일명과 일치하게 한다. uuid + getExt 사용
         String savedPicName = (p.getPic() != null ? myFileUtils.makeRandomFileName(p.getPic()) : null);
         // 2. 기존 파일 삭제 (1. 폴더를 지운다 2.select 해서 기존 파일명을 얻어온다. 3.기존 파일명을 FrontEnd 에서 받는다.)

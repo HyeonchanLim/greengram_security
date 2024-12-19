@@ -1,5 +1,6 @@
 package com.green.greengram.feed.like.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +13,7 @@ import lombok.Setter;
 public class FeedLikeReq {
     @Schema(title = "피드 PK" , example = "2" , requiredMode = Schema.RequiredMode.REQUIRED)
     private long feedId;
-    @Schema(title = "유저 PK" , example = "1" , requiredMode = Schema.RequiredMode.REQUIRED)
+    @JsonIgnore
     private long userId;
 
 }

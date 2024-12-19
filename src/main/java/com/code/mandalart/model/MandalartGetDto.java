@@ -1,4 +1,4 @@
 package com.code.mandalart.model;
 
-public class MandalartGetList {
+public class MandalartGetDto {
 }

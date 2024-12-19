@@ -1,5 +1,6 @@
 package com.green.greengram.feed.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.green.greengram.common.model.Paging;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -13,10 +14,10 @@ import org.springframework.web.bind.annotation.BindParam;
 // 부모한테 있는 생성자 값도 찍음 , 없으면 본인꺼만 찍음
 // tostring 오버라이딩 -> 값 출력이 더 생기는 이유 ( 생성자 2개 작성 )
 public class FeedGetReq extends Paging {
-    @Schema(title = "로그인 유저 pk" , name = "signed_user_id", example = "1" , requiredMode = Schema.RequiredMode.REQUIRED)
+    @JsonIgnore
     private long signedUserId;
     // pk 값 가져옴
-    @Schema(title = "프로필 유저 pk" , name = "profile_user_id" , example = "2" , requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(name = "profile_user_id")
     private Long profileUserId;
 //    @ConstructorProperties({"page", "size", "signed_user_id"})
     // 쿼리스트링에서만 bindparam , constructorproperties 사용
@@ -24,12 +25,14 @@ public class FeedGetReq extends Paging {
     // setter 에서는 bindparam 사용 불가능함 -> 생성자로 값을 주입해줘야 함
     // swagger 에서 try it out 할 때 변경되는 key 값 -> key 값에 맞춰서 매개변수도 작성해줘야함
     public FeedGetReq (Integer page , Integer size
-            , @BindParam("signed_user_id") long signedUserId
             , @BindParam("profile_user_id") Long profileUserId){
         // profileUserId -> 없을 때 없는대로 , 있으면 순서로
         super(size, page);
-        this.signedUserId=signedUserId;
         this.profileUserId=profileUserId;
+    }
+
+    public void setSighedUserId(long signedUserId) {
+        this.signedUserId = signedUserId;
     }
 }
 // 데이터를 클라이언트에게 돌려줄 때 json 형태로 반환하는데 여기서 body 에 담아서 전송

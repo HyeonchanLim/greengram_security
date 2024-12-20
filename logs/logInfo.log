@@ -17464,3 +17464,27 @@ This generated password is for development use only. Your security configuration
 [2024-12-20 14:19:14 [32mINFO [0;39m restartedMain] [36m[org.apache.coyote.http11.Http11NioProtocol][0;39m Starting ProtocolHandler ["http-nio-8080"]
 [2024-12-20 14:19:14 [32mINFO [0;39m restartedMain] [36m[org.springframework.boot.web.embedded.tomcat.TomcatWebServer][0;39m Tomcat started on port 8080 (http) with context path '/'
 [2024-12-20 14:19:14 [32mINFO [0;39m restartedMain] [36m[com.green.greengram.GreenGramVer2Application][0;39m Started GreenGramVer2Application in 1.831 seconds (process running for 2.178)
+[2024-12-20 14:19:33 [32mINFO [0;39m File Watcher] [36m[org.springframework.boot.devtools.autoconfigure.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener][0;39m Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+[2024-12-20 14:19:33 [32mINFO [0;39m Thread-5] [36m[org.apache.coyote.http11.Http11NioProtocol][0;39m Stopping ProtocolHandler ["http-nio-8080"]
+[2024-12-20 14:19:33 [32mINFO [0;39m restartedMain] [36m[com.green.greengram.GreenGramVer2Application][0;39m Starting GreenGramVer2Application using Java 17.0.12 with PID 12792 (D:\LHC\GreenGram_Security\build\classes\java\main started by Administrator in D:\LHC\GreenGram_Security)
+[2024-12-20 14:19:33 [32mINFO [0;39m restartedMain] [36m[com.green.greengram.GreenGramVer2Application][0;39m No active profile set, falling back to 1 default profile: "default"
+[2024-12-20 14:19:33 [32mINFO [0;39m restartedMain] [36m[org.springframework.boot.web.embedded.tomcat.TomcatWebServer][0;39m Tomcat initialized with port 8080 (http)
+[2024-12-20 14:19:33 [32mINFO [0;39m restartedMain] [36m[org.apache.coyote.http11.Http11NioProtocol][0;39m Initializing ProtocolHandler ["http-nio-8080"]
+[2024-12-20 14:19:33 [32mINFO [0;39m restartedMain] [36m[org.apache.catalina.core.StandardService][0;39m Starting service [Tomcat]
+[2024-12-20 14:19:33 [32mINFO [0;39m restartedMain] [36m[org.apache.catalina.core.StandardEngine][0;39m Starting Servlet engine: [Apache Tomcat/10.1.33]
+[2024-12-20 14:19:33 [32mINFO [0;39m restartedMain] [36m[org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]][0;39m Initializing Spring embedded WebApplicationContext
+[2024-12-20 14:19:33 [32mINFO [0;39m restartedMain] [36m[org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext][0;39m Root WebApplicationContext: initialization completed in 218 ms
+[2024-12-20 14:19:33 [32mINFO [0;39m restartedMain] [36m[com.green.greengram.common.MyFileUtils][0;39m MyFileUtils - 생성자: D:/2024-02/download/greengram_ver3
+[2024-12-20 14:19:33 [33mWARN [0;39m restartedMain] [36m[org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration][0;39m 
+
+Using generated security password: f4a8daf0-895b-4c1f-8375-fa6301c22d45
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+[2024-12-20 14:19:33 [32mINFO [0;39m restartedMain] [36m[org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer][0;39m Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+[2024-12-20 14:19:33 [32mINFO [0;39m restartedMain] [36m[org.springframework.boot.autoconfigure.web.servlet.WelcomePageHandlerMapping][0;39m Adding welcome page: class path resource [static/index.html]
+[2024-12-20 14:19:33 [32mINFO [0;39m restartedMain] [36m[org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer][0;39m LiveReload server is running on port 35729
+[2024-12-20 14:19:33 [32mINFO [0;39m restartedMain] [36m[org.apache.coyote.http11.Http11NioProtocol][0;39m Starting ProtocolHandler ["http-nio-8080"]
+[2024-12-20 14:19:33 [32mINFO [0;39m restartedMain] [36m[org.springframework.boot.web.embedded.tomcat.TomcatWebServer][0;39m Tomcat started on port 8080 (http) with context path '/'
+[2024-12-20 14:19:33 [32mINFO [0;39m restartedMain] [36m[com.green.greengram.GreenGramVer2Application][0;39m Started GreenGramVer2Application in 0.406 seconds (process running for 20.877)
+[2024-12-20 14:19:33 [32mINFO [0;39m restartedMain] [36m[org.springframework.boot.devtools.autoconfigure.ConditionEvaluationDeltaLoggingListener][0;39m Condition evaluation unchanged

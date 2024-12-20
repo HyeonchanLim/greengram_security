@@ -38,6 +38,8 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    // 유효성 검사 - 프론트에서 넘어오는 데이터가 내가 원하는 데이터인지 확인하기 위해서 사용
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'

@@ -15,7 +15,7 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
         )
         , security = @SecurityRequirement(name = "Authorization")
 )
-
+// schema 전부 security 활성화
 @SecurityScheme(
         type = SecuritySchemeType.HTTP
         , name = "Authorization"

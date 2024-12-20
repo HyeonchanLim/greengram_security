@@ -31,6 +31,7 @@ public class UserController {
                 .build();
     }
     @PostMapping("sign-in")
+    // access-token request 실행 후 response 응답해주는 과정 - 여기서 로그인 절차 밟음
     public ResultResponse<UserSignInRes> selUserForSignIn (@RequestBody UserSignInReq p , HttpServletResponse response) {
         UserSignInRes result = service.selUserForSignIn(p , response);
         return ResultResponse.<UserSignInRes>builder()
@@ -49,7 +50,8 @@ public class UserController {
                 .build();
     }
     @GetMapping("access-token")
-    @Operation(summary = "AccessToken 재발행")
+    @Operation(summary = "Access Token 재발행")
+    //request -> tomcat 실행 -> filter -> dispatcherservlet -> mapping -> controller
     public ResultResponse<String> getAccessToken(HttpServletRequest req){
         String accessToken = service.getAccessToken(req);
 

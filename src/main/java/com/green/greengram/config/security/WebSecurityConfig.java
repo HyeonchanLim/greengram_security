@@ -52,6 +52,7 @@ public class WebSecurityConfig {
                 // authenticated 같은 접근 제어 메서드, 종결 메서드를 명시하지 않으면 체이닝 구문 오류가 발생
                 // 나머지는 모두 허용하겠다는 표시 permitall
                 .addFilterBefore(tokenAuthenticationFilter , UsernamePasswordAuthenticationFilter.class)
+                // filter 붙은 클래스 /
                 .build();
                 // builder 는 아니지만 체이닝 기법을 종료하기 위해서 build 로 종료해줌
     }

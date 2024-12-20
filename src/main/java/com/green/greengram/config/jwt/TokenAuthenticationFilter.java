@@ -26,10 +26,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     // filterchain 으로 다음 필터에 패스함
-    protected void doFilterInternal(HttpServletRequest request
+    protected void doFilterInternal(HttpServletRequest request // request 에 리턴 -> 다음 필터 절차에서 또 호출 가능 -> 재활용 가능
                                     , HttpServletResponse response
                                     , FilterChain filterChain) throws ServletException, IOException {
-        String authorizationHeader = request.getHeader(HEADER_AUTHORIZATION);
+        String authorizationHeader = request.getHeader(HEADER_AUTHORIZATION); // bearer 토큰값
         log.info("ip address: {}", request.getRemoteAddr());
         // header 키값인 Authorization 확인 -> 아니면 null
         log.info("authorizationHeader: {}" , authorizationHeader);
@@ -40,6 +40,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             Authentication auth = tokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(auth);
         } // token 유효하면 auth 담을꺼고 아니면 request , response 반환
+        // 요청 들어오는 token(bearer 제외) 값만 확인 절차 걸침 -> 요청 때만 실행
 
         filterChain.doFilter(request,response); // request - response 필터로 연결
     }

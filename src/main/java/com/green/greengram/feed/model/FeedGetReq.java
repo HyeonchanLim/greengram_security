@@ -3,6 +3,7 @@ package com.green.greengram.feed.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.green.greengram.common.model.Paging;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +18,12 @@ public class FeedGetReq extends Paging {
     @JsonIgnore
     private long signedUserId;
     // pk 값 가져옴
+
+    @Positive
     @Schema(name = "profile_user_id")
     private Long profileUserId;
-//    @ConstructorProperties({"page", "size", "signed_user_id"})
+
+    //@ConstructorProperties({"page", "size", "signed_user_id"})
     // 쿼리스트링에서만 bindparam , constructorproperties 사용
     // camel 케이스 기법 사용x -> snake 케이스 기법 사용
     // setter 에서는 bindparam 사용 불가능함 -> 생성자로 값을 주입해줘야 함

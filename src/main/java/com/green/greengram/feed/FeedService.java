@@ -113,6 +113,8 @@ public class FeedService {
     public List<FeedGetRes> getFeedList2(FeedGetReq p){
         return null;
     }
+
+
     public List<FeedGetRes> getFeedList3(FeedGetReq p){
         p.setSighedUserId(authenticationFacade.getSignedUserId());
         List<FeedGetRes> list = mapper.selFeedList(p);

@@ -12,6 +12,7 @@ import java.util.List;
 @Getter
 @SuperBuilder
 public class MyErrorResponse extends ResultResponse<String> {
+    // response 를 string 으로 고정했음 / 이전까지는 list 로 타입에 맞춰서 던졌음
     // Validation 에러메시지 전달
     private final List<ValidationError> valids;
     // resultresponse 에서 valids 까지 추가해서 3가지로 빌더 빌드 생성 가능

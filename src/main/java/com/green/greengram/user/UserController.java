@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
@@ -32,10 +33,11 @@ public class UserController {
     }
     @PostMapping("sign-in")
     // access-token request 실행 후 response 응답해주는 과정 - 여기서 로그인 절차 밟음
-    public ResultResponse<UserSignInRes> selUserForSignIn (@RequestBody UserSignInReq p , HttpServletResponse response) {
+    // 이제 오류 처리는 서비스에서 잡고 성공한 정상적인 데이터만 줄꺼임
+    public ResultResponse<UserSignInRes> selUserForSignIn (@Valid  @RequestBody UserSignInReq p , HttpServletResponse response) {
         UserSignInRes result = service.selUserForSignIn(p , response);
         return ResultResponse.<UserSignInRes>builder()
-                .resultMessage(result.getMessage())
+                .resultMessage("로그인 성공")
                 .resultData(result)
                 .build();
     }

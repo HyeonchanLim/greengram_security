@@ -36,9 +36,13 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
         String token = getAccessToken(authorizationHeader);
         log.info("token: {}" , token);
-        if (tokenProvider.validToken(token)){
-            Authentication auth = tokenProvider.getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(auth);
+        if(token != null) {
+            try {
+                Authentication auth = tokenProvider.getAuthentication(token);
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            } catch (Exception e) {
+                request.setAttribute("exception", e);
+            }
         } // token 유효하면 auth 담을꺼고 아니면 request , response 반환
         // 요청 들어오는 token(bearer 제외) 값만 확인 절차 걸침 -> 요청 때만 실행
 

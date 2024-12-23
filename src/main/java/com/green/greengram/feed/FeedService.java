@@ -1,6 +1,8 @@
 package com.green.greengram.feed;
 
 import com.green.greengram.common.MyFileUtils;
+import com.green.greengram.common.exception.CustomException;
+import com.green.greengram.common.exception.FeedErrorCode;
 import com.green.greengram.config.security.AuthenticationFacade;
 import com.green.greengram.feed.comment.FeedCommentMapper;
 import com.green.greengram.feed.comment.model.FeedCommentDto;
@@ -15,10 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -36,8 +35,15 @@ public class FeedService {
     // 애노테이션 없으면 오류 직전까지의 실행부분이 실행 적용
     // 아래의 메소드에 구현부 내용이 많다 -> 트랜젝션
     public FeedPostRes postFeed(List<MultipartFile> pics , FeedPostReq p){
+//        if (pics.size()==0){
+//            throw new CustomException(FeedErrorCode.REQUIRED_IMAGE);
+//        }
         p.setWriterUserId(authenticationFacade.getSignedUserId());
+
         int result = mapper.insFeed(p);
+        if (result==0){
+            throw new CustomException(FeedErrorCode.FAIL_TO_REG);
+        }
         // 파일 등록
         long feedId = p.getFeedId();
 
@@ -56,7 +62,10 @@ public class FeedService {
             try {
                 myFileUtils.transferTo(pic , filePath);
             } catch (IOException e) {
-                e.printStackTrace();
+                // 폴더 삭제 처리
+                String delFolderPath = String.format("%s/%s",myFileUtils.getUploadPath(),middlePath);
+                myFileUtils.deleteFolder(delFolderPath,true);
+                throw new CustomException(FeedErrorCode.FAIL_TO_REG);
             }
             // 피드 하나당 사진이 여러개 -> 1 : n 관계  - for 문으로 반복
         }
@@ -64,7 +73,7 @@ public class FeedService {
         feedPicDto.setPics(picNameList);
         feedPicDto.setFeedId(feedId);
         int resultpics = feedpicMapper.insFeedpic(feedPicDto);
-
+        
         // postres SETTER 사용했을 경우
 //        FeedPostRes res = new FeedPostRes();
 //        res.setFeedId(feedId);

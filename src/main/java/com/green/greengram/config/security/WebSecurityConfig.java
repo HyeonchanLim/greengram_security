@@ -1,6 +1,7 @@
 package com.green.greengram.config.security;
 // spring security 세팅
 
+import com.green.greengram.config.jwt.JwtAuthenticationEntryPoint;
 import com.green.greengram.config.jwt.TokenAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +21,7 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 // @EnableWebSecurity 없어도 괜찮음
 public class WebSecurityConfig {
     private final TokenAuthenticationFilter tokenAuthenticationFilter;
-
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 //    // 스프링 시큐리티 기능 비활성화(스프링 시큐리티가 관여하지 않았으면 하는 부분)
 //    @Bean
 //    public WebSecurityCustomizer webSecurityCustomizer(){
@@ -51,6 +52,7 @@ public class WebSecurityConfig {
                 // authenticated() 는 요청이 매칭되었을 때 인증된 사용자만 접근을 허용 즉, 로그인이 필요
                 // authenticated 같은 접근 제어 메서드, 종결 메서드를 명시하지 않으면 체이닝 구문 오류가 발생
                 // 나머지는 모두 허용하겠다는 표시 permitall
+                .exceptionHandling(e -> e.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .addFilterBefore(tokenAuthenticationFilter , UsernamePasswordAuthenticationFilter.class)
                 // filter 붙은 클래스 /
                 .build();

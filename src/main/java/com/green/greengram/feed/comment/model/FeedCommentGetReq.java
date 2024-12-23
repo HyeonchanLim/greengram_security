@@ -3,6 +3,9 @@ package com.green.greengram.feed.comment.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.green.greengram.common.Constants;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -16,11 +19,16 @@ public class FeedCommentGetReq {
 //    private final static int DEFAULT_PAGE_SIZE = 20;
 //    yaml 20 작성했으니 제외
 
+    @Positive
     @Schema(title = "피드 pk", name = "feed_id", description = "피드 PK", example = "1" , requiredMode = Schema.RequiredMode.REQUIRED)
     private long feedId; // n + 1 방식이라 feedId 가 필요함
+
+    @PositiveOrZero
     @Schema(title="ㅅ", description = "피드 PK", name="start_idx", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
     private int startIdx;
-    @JsonIgnore
+
+    @Min(value = 21 , message = "사이즈는 20 이상이어야 합니다.")
+    @Schema(title = "페이지 당 아이템 수" , description = "default = 20")
     private int size;
 
 

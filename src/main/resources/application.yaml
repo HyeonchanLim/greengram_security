@@ -20,6 +20,9 @@ spring:
     url: jdbc:log4jdbc:mariadb://localhost:3306/greengram_ver3
     username : root
     password : green502
+  jackson:
+    default-property-inclusion: non_null #응답 JSON 을 만들 때 NULL 인 속성은 제외한다.
+
 
   servlet:
     multipart:

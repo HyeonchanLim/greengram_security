@@ -2,6 +2,8 @@ package com.green.greengram.config.jwt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.green.greengram.common.exception.CustomException;
+import com.green.greengram.common.exception.UserErrorCode;
 import com.green.greengram.config.security.MyUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwt;
@@ -78,18 +80,18 @@ public class TokenProvider {
             // 위에서 발생하는 문제를 런타임 예외로 변환하여 처리함
         }
     }
-    public boolean validToken (String token){
-        // jwt 복호화
-        try {
-            // 토큰에서 claims 객체를 추출 (여기서 token 이 signature 부분 담당)
-            // 여기서 getclaims 의 signature 검증
-            // 이상이 없으면 true 반납하면서 payload 호출
-            getClaims(token);
-            return true;
-        } catch (Exception e){
-            return false;
-        }
-    }
+//    public boolean validToken (String token){
+//        // jwt 복호화
+//        try {
+//            // 토큰에서 claims 객체를 추출 (여기서 token 이 signature 부분 담당)
+//            // 여기서 getclaims 의 signature 검증
+//            // 이상이 없으면 true 반납하면서 payload 호출
+//            getClaims(token);
+//        } catch (Exception e){
+//            throw new CustomException(UserErrorCode.EXPIRED_TOKEN);
+//        }
+//            return true;
+//    }
     // spring security 에서 인증 처리를 해주어야 하는데 이때 Authentication 객체가 필요
     public Authentication getAuthentication(String token){
         // getuser - token 을 파싱해서 사용자 정보를 가져옴
@@ -136,10 +138,7 @@ public class TokenProvider {
         // validToken 의 복호화를 위해서 서명 부분 체크해주는 역할도 함
 
         return Jwts.parser()
-                .verifyWith(secretKey)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+                .verifyWith(secretKey).build().parseSignedClaims(token).getPayload();
         // 1. jwt 파서 생성
         // 2. 서명 검증(secretKey 사용)
         // 3. 파서 빌드

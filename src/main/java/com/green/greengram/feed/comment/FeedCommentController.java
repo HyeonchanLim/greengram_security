@@ -5,6 +5,7 @@ import com.green.greengram.feed.comment.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
@@ -32,7 +33,7 @@ public class FeedCommentController {
     }
     @GetMapping
     @Operation(summary = "피드 댓글 리스트", description = "댓글 더보기 처리 - 파라미터를 ModelAttribute를 이용해서 받음")
-    public ResultResponse<FeedCommentGetRes> getFeedComment(@ParameterObject @ModelAttribute FeedCommentGetReq p) {
+    public ResultResponse<FeedCommentGetRes> getFeedComment(@Valid @ParameterObject @ModelAttribute FeedCommentGetReq p) {
         log.info("FeedCommentController > getFeedComment > p: {}", p);
         FeedCommentGetRes res = service.getFeedComment(p);
         return ResultResponse.<FeedCommentGetRes>builder()

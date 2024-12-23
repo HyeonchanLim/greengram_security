@@ -1,8 +1,10 @@
 package com.green.greengram.common.exception;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -25,19 +27,49 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     //(추가메소드) 우리가 커스텀한 예외가 발생되었을 경우 캐치
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<Object> handleException(CustomException e){
-        return null;
+        log.error("CustomException - handlerException: {}", e);
+        return handleExceptionInternal(e.getErrorCode());
     }
+
     //Validation 예외가 발생되었을 경우 캐치
+    // ResultResponse 기존에 쓰던거는 body 에 담기고
+    // 최종적으로는 ResponseEntity 를 써야함
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex
                                                                                     , HttpHeaders headers
                                                                                     , HttpStatusCode statusCode
                                                                                     , WebRequest request) {
-        return null;
+    return handleExceptionInternal(CommonErrorCode.INVALID_PARAMETER,ex);
+    // 내가 지정한 에러 코드 400 ,401 등 발생하면 전부 잡음
     }
 
+    //토큰 값이 유효하지 않을 때 , 오염 되었을 때
+    @ExceptionHandler({MalformedJwtException.class , SignatureException.class})
+    public ResponseEntity<Object> handleMalformedJwtException() {
+        return handleExceptionInternal(UserErrorCode.INVALID_TOKEN);
+    }
 
+    @ExceptionHandler(ExpiredJwtException.class) //토큰이 만료가 되었을 때
+    public ResponseEntity<Object> handleExpiredJwtException() {
+        return handleExceptionInternal(UserErrorCode.EXPIRED_TOKEN);
+    }
 
+    private ResponseEntity<Object> handleExceptionInternal (ErrorCode errorCode){
+        return handleExceptionInternal(errorCode,null);
+    }
+
+    private ResponseEntity<Object> handleExceptionInternal (ErrorCode errorCode , BindException e){
+        return ResponseEntity.status(errorCode.getHttpStatus())
+                .body(makeErrorResponse(errorCode,e));
+    }
+
+    private MyErrorResponse makeErrorResponse(ErrorCode errorCode , BindException e){
+        return MyErrorResponse.builder()
+                .resultMessage(errorCode.getMessage())
+                .resultData(errorCode.name())
+                .valids(e == null ? null : getValidationError(e))
+                .build();
+    }
 
     private List<MyErrorResponse.ValidationError> getValidationError(BindException e){
         //List<FieldError> fieldErrors = e.getFieldErrors();
@@ -49,9 +81,4 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         }
         return errors;
     }
-
-
-
-
-
 }

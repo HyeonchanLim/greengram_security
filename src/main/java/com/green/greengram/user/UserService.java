@@ -2,6 +2,8 @@ package com.green.greengram.user;
 
 import com.green.greengram.common.CookieUtils;
 import com.green.greengram.common.MyFileUtils;
+import com.green.greengram.common.exception.CustomException;
+import com.green.greengram.common.exception.UserErrorCode;
 import com.green.greengram.config.jwt.JwtUser;
 import com.green.greengram.config.jwt.TokenProvider;
 import com.green.greengram.config.security.AuthenticationFacade;
@@ -11,11 +13,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.Duration;
@@ -61,15 +60,21 @@ public class UserService {
                                             , HttpServletResponse response){
         UserSignInRes res = mapper.selUserByUid(p.getUid());
 
-        if (res == null){
-            res = new UserSignInRes();
-            res.setMessage("아이디를 확인해 주세요.");
-            return res;
-        } else if (!passwordEncoder.matches(p.getUpw() , res.getUpw())){ // 비밀번호가 다를 경우
-            res = new UserSignInRes();
-            res.setMessage("비밀번호를 확인해 주세요");
-            return res;
+        // 보안 강화로 아이디 , 비밀번호 확인 따로 분류하지 않겟음
+        // 오류가 터지면 전부 throw 일괄 처리
+        if (res == null || !passwordEncoder.matches(p.getUpw(),res.getUpw())){
+            throw new CustomException(UserErrorCode.INCORRECT_ID_PW);
         }
+
+//        if (res == null){
+//            res = new UserSignInRes();
+//            res.setMessage("아이디를 확인해 주세요.");
+//            return res;
+//        } else if (!passwordEncoder.matches(p.getUpw() , res.getUpw())){ // 비밀번호가 다를 경우
+//            res = new UserSignInRes();
+//            res.setMessage("비밀번호를 확인해 주세요");
+//            return res;
+//        }
 
         // jwt 토큰 - 액세스토큰 , 리프레쉬 토큰 2개 생성
         // 액세스 (20분) , 리프레쉬 (15일) 유효기간
@@ -79,7 +84,7 @@ public class UserService {
         jwtUser.getRoles().add("ROLE_USER");
         jwtUser.getRoles().add("ROLE_ADMIN");
         System.out.println(jwtUser.getRoles());
-        String accessToken = tokenProvider.generateToken(jwtUser , Duration.ofMinutes(100));
+        String accessToken = tokenProvider.generateToken(jwtUser , Duration.ofSeconds(30));
         String refreshToken = tokenProvider.generateToken(jwtUser , Duration.ofDays(15));
 
         // refreshToken 은 쿠키에 담아서 보낼꺼임
@@ -102,7 +107,7 @@ public class UserService {
         log.info("refreshToken: {}", refreshToken);
 
         JwtUser jwtUser = tokenProvider.getJwtUserFromToken(refreshToken);
-        String accessToken = tokenProvider.generateToken(jwtUser, Duration.ofMinutes(100));
+        String accessToken = tokenProvider.generateToken(jwtUser, Duration.ofSeconds(30));
         return accessToken;
     }
 

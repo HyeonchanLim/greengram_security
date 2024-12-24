@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 @OpenAPIDefinition(
         info = @Info(
                 title = "GreenGram",
-                version = "v1",
+                version = "v3.1",
                 description = "그린그램 SNS"
         )
         , security = @SecurityRequirement(name = "Authorization")

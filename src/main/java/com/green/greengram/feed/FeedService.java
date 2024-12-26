@@ -5,10 +5,7 @@ import com.green.greengram.common.exception.CustomException;
 import com.green.greengram.common.exception.FeedErrorCode;
 import com.green.greengram.config.security.AuthenticationFacade;
 import com.green.greengram.feed.comment.FeedCommentMapper;
-import com.green.greengram.feed.comment.model.FeedCommentDto;
-import com.green.greengram.feed.comment.model.FeedCommentGetReq;
-import com.green.greengram.feed.comment.model.FeedCommentGetRes;
-import com.green.greengram.feed.comment.model.FeedPicSel;
+import com.green.greengram.feed.comment.model.*;
 import com.green.greengram.feed.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -120,10 +117,44 @@ public class FeedService {
     }
 
     public List<FeedGetRes> getFeedList2(FeedGetReq p){
-        return null;
+        List<FeedGetRes> list = new ArrayList<>(p.getSize());
+        // select (1) : feed + feed_pic
+        //feed_id 로 분류해서 pic 데이터 입력
+        List<FeedAndPicDto> feedAndPicDtos = mapper.selFeedWithPicList(p);
+        FeedGetRes beforeFeedGetRes = new FeedGetRes();
+        for (FeedAndPicDto pic : feedAndPicDtos){
+            if (beforeFeedGetRes.getFeedId() != pic.getFeedId()){
+                beforeFeedGetRes = new FeedGetRes();
+                // 여기서 new 로 새로 쓰는 이유는 id 객체 새로 만들어서 데이터 넣을려고
+                beforeFeedGetRes.setPics(new ArrayList<>(3));
+                list.add(beforeFeedGetRes);
+                beforeFeedGetRes.setFeedId(pic.getFeedId());
+                beforeFeedGetRes.setContents(pic.getContents());
+                beforeFeedGetRes.setLocation(pic.getLocation());
+                beforeFeedGetRes.setCreatedAt(pic.getCreatedAt());
+                beforeFeedGetRes.setWriterUserId(pic.getWriterUserId());
+                beforeFeedGetRes.setWriterNm(pic.getWriterNm());
+                beforeFeedGetRes.setWriterPic(pic.getWriterPic());
+                beforeFeedGetRes.setIsLike(pic.getIsLike());
+            }
+            beforeFeedGetRes.getPics().add(pic.getPic());
+        }
+
+        // select (2) : feed_comment
+
+        return list;
     }
-
-
+    public List<FeedGetRes> getFeedList4 (FeedGetReq p){
+        List<FeedWithPicCommentDto> dtoList = mapper.selFeedWithPicAndCommentLimit4List(p);
+        // TODO : 컨버트 작업
+        mapper.selFeedWithPicAndCommentLimit4List(p);
+        List<FeedGetRes> res = new ArrayList<>(dtoList.size());
+        for(FeedWithPicCommentDto dto : dtoList){
+            FeedGetRes res1 = new FeedGetRes(dto);
+            res.add(res1);
+        }
+        return res;
+    }
     public List<FeedGetRes> getFeedList3(FeedGetReq p){
         p.setSighedUserId(authenticationFacade.getSignedUserId());
         List<FeedGetRes> list = mapper.selFeedList(p);

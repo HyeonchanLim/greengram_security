@@ -3,6 +3,7 @@ package com.green.greengram.feed.model;
 import com.green.greengram.feed.comment.model.FeedCommentGetRes;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @Schema(title = "피드 정보")
+@NoArgsConstructor // 기본 생성자 만드는 어노테이션
 public class FeedGetRes {
     @Schema(title = "피드 PK")
     private long feedId;
@@ -36,4 +38,25 @@ public class FeedGetRes {
     // 보낼 이유가 없어서 따로 분리해서 작성함
     // 댓글이 더 있냐 없냐 확인 + list(commentdto) 목록
 
+
+    public FeedGetRes(FeedWithPicCommentDto dto) {
+        this.feedId = dto.getFeedId();
+        this.contents = dto.getContents();
+        this.location = dto.getLocation();
+        this.createdAt = dto.getCreatedAt();
+        this.writerUserId = dto.getWriterUserId();
+        this.writerNm = dto.getWriterNm();
+        this.writerPic = dto.getWriterPic();
+        this.isLike = dto.getIsLike();
+        this.pics = dto.getPics();
+        this.comment = new FeedCommentGetRes();
+        // morecomment , comment size 4개 체크
+        // dto.getCommentList().size() 값이 4라면
+        // TODO : 댓글 moreComment , list 컨버트
+        if (dto.getCommentList().size() == 4) {
+            this.comment.setMoreComment(true);
+            this.comment.setCommentList(dto.getCommentList());
+            this.comment.getCommentList().remove(comment.getCommentList().size()-1);
+        }
+    }
 }

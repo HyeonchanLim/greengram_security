@@ -32,6 +32,7 @@ public class FeedGetRes {
 
     @Schema(title = "피드 사진 리스트")
     private List<String> pics;
+    // 피드 아이디 하나당 사진 n개 가질 수 있도록 해줌
     @Schema(title = "피드 댓글")
     private FeedCommentGetRes comment;
     // getres 에 작성한 이유는 프론트에서 더보기 여부 + 댓글 더 있는지 체크 하는걸 중복 데이터

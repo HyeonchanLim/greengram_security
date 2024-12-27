@@ -27,9 +27,9 @@
         ORDER BY A.feed_id DESC
         LIMIT #{startIdx}, #{size}
     </select>
-
     <resultMap id="feedResultMap" type="com.green.greengram.feed.model.FeedWithPicCommentDto">
         <!-- property 는 객체의 멤버필드 이름 , column 은 쿼리의 컬럼명 -->
+        <!-- id 에 담은 feedId 만 담도록 설정함  -->
         <id property="feedId" column="feedId" />
         <result property="contents" column="contents" />
         <result property="location" column="location" />
@@ -39,14 +39,16 @@
         <result property="writerPic" column="writerPic" />
         <result property="isLike" column="isLike" />
         <collection property="pics" resultMap="feedPicResultMap" />
+        <!-- collection 은 위의 id - feedId 기준 pic 을 list 로 담아서 묶어줌  -->
         <collection property="commentList" resultMap="feedCommentResultMap" />
     </resultMap>
 
     <resultMap id="feedPicResultMap" type="String">
-        <result property="pic" column="pic" />
+        <id property="pic" column="pic" />
     </resultMap>
 
     <resultMap id="feedCommentResultMap" type="com.green.greengram.feed.comment.model.FeedCommentDto">
+        <!-- 아래도 똑같이 id 기준 정렬 -->
         <id property="feedCommentId" column="feed_comment_id" />
         <result property="comment" column="comment" />
         <result property="writerUserId" column="commentWriterUserId" />
@@ -93,6 +95,8 @@
         ) T3
         ON T1.feedId = T3.feed_id
     </select>
+    <!-- limit 까지 userID 출력 + join 으로 feed pic 이 출력 되면서 해당 feed_id 의 pic 이 전부 나오게 됨
+     -->
     <select id="selFeedWithPicList">
         SELECT T1.*, T2.pic
         FROM (

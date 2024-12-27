@@ -122,12 +122,16 @@ public class FeedService {
         //feed_id 로 분류해서 pic 데이터 입력
         List<FeedAndPicDto> feedAndPicDtos = mapper.selFeedWithPicList(p);
         FeedGetRes beforeFeedGetRes = new FeedGetRes();
+        // 기존 피드 id 를 0 으로 셋팅하고 나머지 전부 null 셋팅
         for (FeedAndPicDto pic : feedAndPicDtos){
+            // dto 객체 넘어오면서 피드 아이디 가져옴
+            // 기존의 피드 id 는 0 이라서 값 비교 -> 새로운 값이 있으니 true -> new 새로운 객체 생성하고 데이터 입력
             if (beforeFeedGetRes.getFeedId() != pic.getFeedId()){
                 beforeFeedGetRes = new FeedGetRes();
                 // 여기서 new 로 새로 쓰는 이유는 id 객체 새로 만들어서 데이터 넣을려고
                 beforeFeedGetRes.setPics(new ArrayList<>(3));
                 list.add(beforeFeedGetRes);
+                // 리턴하는 list 에 데이터 add
                 beforeFeedGetRes.setFeedId(pic.getFeedId());
                 beforeFeedGetRes.setContents(pic.getContents());
                 beforeFeedGetRes.setLocation(pic.getLocation());
@@ -140,14 +144,37 @@ public class FeedService {
             beforeFeedGetRes.getPics().add(pic.getPic());
         }
 
-        // select (2) : feed_comment
+        //SELECT (2): feed_comment
+        List<FeedCommentDto> feedCommentList = mapper.selFeedWithPicAndCommentLimit4List(feedIds);
+        Map<Long, FeedCommentGetRes> commentHashMap = new HashMap<>();
+        for(FeedCommentDto item : feedCommentList) {
+            long feedId = item.getFeedId();
+            if(!commentHashMap.containsKey(feedId)) {
+                FeedCommentGetRes feedCommentGetRes = new FeedCommentGetRes();
+                feedCommentGetRes.setCommentList(new ArrayList<>(4));
+                commentHashMap.put(feedId, feedCommentGetRes);
+            }
+            FeedCommentGetRes feedCommentGetRes = commentHashMap.get(feedId);
+            feedCommentGetRes.getCommentList().add(item);
+        }
+        for(FeedGetRes res : list) {
+            FeedCommentGetRes feedCommentGetRes = commentHashMap.get(res.getFeedId());
+
+            if(feedCommentGetRes == null) { //댓글이 하나도 없었던 피드인 경우
+                feedCommentGetRes = new FeedCommentGetRes();
+                feedCommentGetRes.setCommentList(new ArrayList<>());
+            } else if (feedCommentGetRes.getCommentList().size() == 4) {
+                feedCommentGetRes.setMoreComment(true);
+                feedCommentGetRes.getCommentList().remove(feedCommentGetRes.getCommentList().size() - 1);
+            }
+            res.setComment(feedCommentGetRes);
+        }
 
         return list;
     }
     public List<FeedGetRes> getFeedList4 (FeedGetReq p){
         List<FeedWithPicCommentDto> dtoList = mapper.selFeedWithPicAndCommentLimit4List(p);
-        // TODO : 컨버트 작업
-        mapper.selFeedWithPicAndCommentLimit4List(p);
+
         List<FeedGetRes> res = new ArrayList<>(dtoList.size());
         for(FeedWithPicCommentDto dto : dtoList){
             FeedGetRes res1 = new FeedGetRes(dto);

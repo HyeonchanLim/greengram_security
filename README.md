@@ -9,10 +9,6 @@
 - Mysql Workbench
 - Swagger UI
 
-## 요구사항 명세서
-![image](https://github.com/user-attachments/assets/84a092cf-6c0d-4ed1-9ae9-446a3db642f2)
-
-
 ## 사용 기술
 
 ### 백엔드
@@ -30,6 +26,9 @@ Gradle
 - Lombok
 - Github-api
 
+## 요구사항 명세서
+![image](https://github.com/user-attachments/assets/84a092cf-6c0d-4ed1-9ae9-446a3db642f2)
+
 ### 데이터베이스
 MySQL
 
@@ -38,6 +37,13 @@ MySQL
 
 ## E-R 다이어그램
 ![image](https://github.com/user-attachments/assets/b0e7ce5b-b1ee-4d3b-8c00-0d62bad20bc6)
+
+## Figma 
+![image](https://github.com/user-attachments/assets/1f611f81-c493-490c-ba70-0075685897dd)
+![image](https://github.com/user-attachments/assets/1098e6eb-9bef-4524-bd6f-0a12affcbf8d)
+![image](https://github.com/user-attachments/assets/6247d14f-cba8-40db-8885-0f46cea304b4)
+
+
 
 
 ## 프로젝트 목적

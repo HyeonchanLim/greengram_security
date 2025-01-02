@@ -23,7 +23,8 @@ Gradle
 - Github-api
 
 ## 시스템 아키텍쳐
-![image](https://github.com/user-attachments/assets/0e2f0b81-e9d9-4ff8-b891-c45878ba1b45)
+![image](https://github.com/user-attachments/assets/fcee2ade-f164-4d47-b640-d031f3aa2e6c)
+
 
 
 ### 헥사고날 아키텍처

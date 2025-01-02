@@ -26,11 +26,11 @@ Gradle
 - Lombok
 - Github-api
 
-## 요구사항 명세서
-![image](https://github.com/user-attachments/assets/84a092cf-6c0d-4ed1-9ae9-446a3db642f2)
-
 ### 데이터베이스
 MySQL
+
+## 요구사항 명세서
+![image](https://github.com/user-attachments/assets/84a092cf-6c0d-4ed1-9ae9-446a3db642f2)
 
 ## 시스템 아키텍쳐
 ![image](https://github.com/user-attachments/assets/fcee2ade-f164-4d47-b640-d031f3aa2e6c)

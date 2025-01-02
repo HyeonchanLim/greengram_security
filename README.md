@@ -40,8 +40,11 @@ MySQL
 
 ## Figma 
 ![image](https://github.com/user-attachments/assets/1f611f81-c493-490c-ba70-0075685897dd)
+- 만다라트 작성 화면 - 입력할 데이터 
 ![image](https://github.com/user-attachments/assets/1098e6eb-9bef-4524-bd6f-0a12affcbf8d)
+- 공유 만다라트 상세 보기 - 입력된 만다라트 , 그래프 , 댓글 , 좋아요 , 
 ![image](https://github.com/user-attachments/assets/6247d14f-cba8-40db-8885-0f46cea304b4)
+- 만다라트 레벨1의 일정 기간 - 캘린더에 표시 
 
 
 

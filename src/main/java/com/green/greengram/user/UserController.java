@@ -40,6 +40,8 @@ public class UserController {
                 .resultMessage("로그인 성공")
                 .resultData(result)
                 .build();
+
+
     }
     @GetMapping
     @Operation(summary = "유저 profile 정보 ")

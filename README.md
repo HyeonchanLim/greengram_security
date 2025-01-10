@@ -46,6 +46,8 @@ MySQL
 ![image](https://github.com/user-attachments/assets/6247d14f-cba8-40db-8885-0f46cea304b4)</br>
 - 만다라트 레벨1의 일정 기간 - 캘린더에 표시 </br>
 
+## CANVA
+https://www.canva.com/design/DAGa1jHRov8/ctzMgK9lwslBnV_IHZ8PQQ/edit
 
 
 쿼리문 - 수정한 내용 ( 어떤 방식에서 바꿨는지 + 바꾼 내용 )

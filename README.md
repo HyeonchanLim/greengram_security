@@ -55,6 +55,9 @@ https://www.canva.com/design/DAGa1jHRov8/ctzMgK9lwslBnV_IHZ8PQQ/edit
 자바 코드 - 스웨거 출력 화면 - 데이터베이스 입력 데이터 
 ## 프로젝트 목적
 
+## 프로젝트 접속 주소
+http://192.168.0.144:5211/
+
 ### ISSUE
 - 
 

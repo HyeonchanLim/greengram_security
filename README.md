@@ -40,7 +40,6 @@ MySQL
 
 ## Figma 
 ![image](https://github.com/user-attachments/assets/1f611f81-c493-490c-ba70-0075685897dd)</br>
-<img src="https://github.com/user-attachments/assets/1f611f81-c493-490c-ba70-0075685897dd" width="500" height="300" />
 
 - 만다라트 작성 화면 - 입력할 데이터 </br>
 ![image](https://github.com/user-attachments/assets/1098e6eb-9bef-4524-bd6f-0a12affcbf8d)</br>

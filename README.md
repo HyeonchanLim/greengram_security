@@ -48,7 +48,7 @@ MySQL
 ![image](https://github.com/user-attachments/assets/84a092cf-6c0d-4ed1-9ae9-446a3db642f2)
 
 ## E-R 다이어그램
-![image](https://github.com/user-attachments/assets/b0e7ce5b-b1ee-4d3b-8c00-0d62bad20bc6)
+![image (2)](https://github.com/user-attachments/assets/7a34e236-4804-4d71-a326-11df643acda5)
 
 ## Figma 
 ![image](https://github.com/user-attachments/assets/1f611f81-c493-490c-ba70-0075685897dd)</br>

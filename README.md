@@ -10,6 +10,10 @@ https://www.notion.so/1-14bedc5262e080cd95a1db757f6a5c48
 ## 프로젝트 접속 주소
 http://192.168.0.144:5211/
 
+## CANVA
+https://www.canva.com/design/DAGa1jHRov8/ctzMgK9lwslBnV_IHZ8PQQ/edit
+
+
 ## 개발 환경
 - IntelliJ
 - Postman
@@ -54,8 +58,6 @@ MySQL
 ![image](https://github.com/user-attachments/assets/6247d14f-cba8-40db-8885-0f46cea304b4)</br>
 - 만다라트 레벨1의 일정 기간 - 캘린더에 표시 </br>
 
-## CANVA
-https://www.canva.com/design/DAGa1jHRov8/ctzMgK9lwslBnV_IHZ8PQQ/edit
 
 ### ISSUE
 - 

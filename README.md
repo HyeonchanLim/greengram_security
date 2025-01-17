@@ -58,6 +58,9 @@ https://www.canva.com/design/DAGa1jHRov8/ctzMgK9lwslBnV_IHZ8PQQ/edit
 ## 프로젝트 접속 주소
 http://192.168.0.144:5211/
 
+## 시연 영상
+Video_5885c863-e4bd-4004-b8e4-5e481352bc90 (1)
+
 ### ISSUE
 - 
 
